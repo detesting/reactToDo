@@ -1,0 +1,10 @@
+.app-footer {
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.app-footer h2 {
+  font-size: 1.2rem;
+  color: grey;
+}
