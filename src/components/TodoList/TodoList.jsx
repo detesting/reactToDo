@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import TodoListItem from '../todo-list-item';
+import TodoListItem from '../TodoListItem';
 
-import './todo-list.css';
+import './TodoList.css';
 
 export default class TodoList extends Component {
   render() {
-    const { todos, onDeleted, onToggleImportant, onToggleDone } = this.props;
+    const { todos, onDeleted, onToggleImportant, onToggleDone, onEdit, editingItem } = this.props;
 
     const elements = todos.map((item) => {
-      const { id, visible, ...itemProps } = item;
+      const { id, visible, label, important, done, date, edit, ...itemProps } = item;
       if (visible) {
         return (
           <li key={id} className="list-group-item">
             <TodoListItem
+              label={label}
+              important={important}
+              done={done}
+              date={date}
+              edit={edit}
               {...itemProps}
               onDeleted={() => onDeleted(id)}
               onToggleImportant={() => onToggleImportant(id)}
               onToggleDone={() => onToggleDone(id)}
+              onEdit={() => onEdit(id)}
+              editingItem={(e, value) => editingItem(id, value, e)}
             />
           </li>
         );

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-import AppHeader from '../app-header';
-import TodoList from '../todo-list';
-import ItemStatusFilter from '../item-status-filter';
-import ItemAddForm from '../item-add-form';
-import AppFooter from '../footer';
+import AppHeader from '../AppHeader';
+import TodoList from '../TodoList';
+import ItemStatusFilter from '../ItemStatusFilter';
+import ItemAddForm from '../ItemAddForm';
+import { Footer } from '../AppFooter';
 
-import './app.css';
+import './App.css';
 
 export default class App extends Component {
   maxId = 100;
@@ -29,15 +29,17 @@ export default class App extends Component {
       id: this.maxId++,
       visible: true,
       date: formatDistanceToNow(Date.parse(date), { addSuffix: true }),
+      edit: false,
     };
   }
 
   deleteItem = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
+    let todos = this.state.todoData;
+    const idx = todos.findIndex((el) => el.id === id);
 
-      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
+    const newArray = [...todos.slice(0, idx), ...todos.slice(idx + 1)];
 
+    this.setState(() => {
       return {
         todoData: newArray,
       };
@@ -47,9 +49,10 @@ export default class App extends Component {
   addItem = (text) => {
     const newItem = this.createTodoItem(text, new Date());
 
-    this.setState(({ todoData }) => {
-      const newArr = [...todoData, newItem];
+    let todos = this.state.todoData;
+    const newArr = [...todos, newItem];
 
+    this.setState(() => {
       return {
         todoData: newArr,
       };
@@ -94,6 +97,37 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       todoData[i].visible = false;
     });
+  };
+
+  onEdit = (id) => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleProperty(todoData, id, 'edit'),
+      };
+    });
+  };
+
+  toggleLabel = (arr, id, value, date) => {
+    const idx = arr.findIndex((el) => el.id === id);
+
+    const oldItem = arr[idx];
+    const newItem = {
+      ...oldItem,
+      label: value,
+      date: formatDistanceToNow(Date.parse(date), { addSuffix: true }),
+    };
+
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
+  };
+
+  editingItem = (id, value, e) => {
+    e.preventDefault();
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleLabel(todoData, id, value, new Date()),
+      };
+    });
+    this.onEdit(id);
   };
 
   onFilterChange = (filter) => {
@@ -143,10 +177,12 @@ export default class App extends Component {
           onDeleted={this.deleteItem}
           onToggleImportant={this.onToggleImportant}
           onToggleDone={this.onToggleDone}
+          onEdit={this.onEdit}
+          editingItem={this.editingItem}
         />
 
         <ItemAddForm onItemAdded={this.addItem} />
-        <AppFooter toDo={todoCount} onClearCompleted={this.onClearCompleted} />
+        <Footer toDo={todoCount} onClearCompleted={this.onClearCompleted} />
       </div>
     );
   }

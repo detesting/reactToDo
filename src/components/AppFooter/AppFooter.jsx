@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './app-footer.css';
+import './AppFooter.css';
 import PropTypes from 'prop-types';
 
 export default class AppFooter extends Component {
