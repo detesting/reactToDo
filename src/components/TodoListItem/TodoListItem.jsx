@@ -56,38 +56,43 @@ export default class TodoListItem extends Component {
           </form>
         ) : (
           <div>
-            <span className='todo-list-item-label' onClick={onToggleDone}>
-              {label}
-            </span>
-            <span className='todo-list-item-label' onClick={onToggleDone}>
-              {min + ':' + sec}
-            </span>
-            <button type='button' className='btn btn-light btn-sm' onClick={onPlay} title='Play'>
-              <i className='fa fa-play' />
-            </button>
-            <button type='button' className='btn btn-light btn-sm' onClick={onPause} title='Pause'>
-              <i className='fa fa-pause' />
-            </button>
-            <span className='todo-list-item-date'>{date}</span>
-            <button
-              type='button'
-              className='btn btn-outline-success btn-sm float-right'
-              onClick={onToggleImportant}
-              title='Make Important'
-            >
-              <i className='fa fa-exclamation' />
-            </button>
-            <button type='button' className='btn btn-outline-warning btn-sm float-right' onClick={onEdit} title='Edit'>
-              <i className='fa fa-pencil' />
-            </button>
-            <button
-              type='button'
-              className='btn btn-outline-danger btn-sm float-right'
-              onClick={onDeleted}
-              title='Delete'
-            >
-              <i className='fa fa-trash-o' />
-            </button>
+            <div>
+              <span className='todo-list-item-label' onClick={onToggleDone}>
+                {label}
+              </span>
+              <span className='todo-list-item-label' onClick={onToggleDone}>
+                {min + ':' + sec}
+              </span>
+              <button type='button' className='btn btn-light btn-sm' onClick={onPlay} title='Play'>
+                <i className='fa fa-play' />
+              </button>
+              <button type='button' className='btn btn-light btn-sm' onClick={onPause} title='Pause'>
+                <i className='fa fa-pause' />
+              </button>
+              <span className='todo-list-item-date'>{date}</span>
+            </div>
+            <div>
+              <button
+                type='button'
+                className='btn btn-outline-success btn-sm float-right'
+                onClick={onToggleImportant}
+                title='Make Important'
+              >
+                <i className='fa fa-exclamation' />
+              </button>
+              <button type='button' className='btn btn-outline-warning btn-sm float-right' onClick={onEdit}
+                      title='Edit'>
+                <i className='fa fa-pencil' />
+              </button>
+              <button
+                type='button'
+                className='btn btn-outline-danger btn-sm float-right'
+                onClick={onDeleted}
+                title='Delete'
+              >
+                <i className='fa fa-trash-o' />
+              </button>
+            </div>
           </div>
         )}
       </span>
