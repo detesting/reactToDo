@@ -1,117 +1,107 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './TodoListItem.css';
 import PropTypes from 'prop-types';
 
-export default class TodoListItem extends Component {
-  state = { value: this.props.label };
+export default function TodoListItem({
+  label,
+  onDeleted,
+  onToggleImportant,
+  onToggleDone,
+  important,
+  done,
+  date,
+  onEdit,
+  edit,
+  editingItem,
+  min,
+  sec,
+  onPause,
+  onPlay,
+}) {
+  const [value, setValue] = useState(label);
 
-  handleChange(event) {
-    this.setState({ value: event.target.value });
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  let classNames = 'todo-list-item';
+  if (done) {
+    classNames += ' done';
   }
 
-  render() {
-    const {
-      label,
-      onDeleted,
-      onToggleImportant,
-      onToggleDone,
-      important,
-      done,
-      date,
-      onEdit,
-      edit,
-      editingItem,
-      min,
-      sec,
-      onPause,
-      onPlay,
-    } =
-      this.props;
+  if (important) {
+    classNames += ' important';
+  }
 
-    let classNames = 'todo-list-item';
-    if (done) {
-      classNames += ' done';
-    }
-
-    if (important) {
-      classNames += ' important';
-    }
-
-    return (
-      <span className={classNames}>
-        {edit ? (
-          <form onSubmit={(e) => editingItem(e, this.state.value)} className='item-edit-form'>
-            <label htmlFor='editInput' />
-            <input
-              type='text'
-              value={this.state.value}
-              onChange={this.handleChange.bind(this)}
-              placeholder='Edit todo'
-              className='form-control'
-              id='editInput'
-              autoFocus
-            />
-            <label htmlFor='submitInput' />
-            <input type='submit' value='Сохранить' className='btn btn-outline-secondary' id='submitInput' />
-          </form>
-        ) : (
+  return (
+    <span className={classNames}>
+      {edit ? (
+        <form onSubmit={(e) => editingItem(e, value)} className="item-edit-form">
+          <label htmlFor="editInput" />
+          <input
+            type="text"
+            value={value}
+            onChange={handleChange}
+            placeholder="Edit todo"
+            className="form-control"
+            id="editInput"
+            autoFocus
+          />
+          <label htmlFor="submitInput" />
+          <input type="submit" value="Сохранить" className="btn btn-outline-secondary" id="submitInput" />
+        </form>
+      ) : (
+        <div>
           <div>
-            <div>
-              <span className='todo-list-item-label' onClick={onToggleDone}>
-                {label}
-              </span>
-              <span className='todo-list-item-label' onClick={onToggleDone}>
-                {min + ':' + sec}
-              </span>
-              <button type='button' className='btn btn-light btn-sm' onClick={onPlay} title='Play'>
-                <i className='fa fa-play' />
-              </button>
-              <button type='button' className='btn btn-light btn-sm' onClick={onPause} title='Pause'>
-                <i className='fa fa-pause' />
-              </button>
-              <span className='todo-list-item-date'>{date}</span>
-            </div>
-            <div>
-              <button
-                type='button'
-                className='btn btn-outline-success btn-sm float-right'
-                onClick={onToggleImportant}
-                title='Make Important'
-              >
-                <i className='fa fa-exclamation' />
-              </button>
-              <button type='button' className='btn btn-outline-warning btn-sm float-right' onClick={onEdit}
-                      title='Edit'>
-                <i className='fa fa-pencil' />
-              </button>
-              <button
-                type='button'
-                className='btn btn-outline-danger btn-sm float-right'
-                onClick={onDeleted}
-                title='Delete'
-              >
-                <i className='fa fa-trash-o' />
-              </button>
-            </div>
+            <span className="todo-list-item-label" onClick={onToggleDone}>
+              {label}
+            </span>
+            <span className="todo-list-item-label" onClick={onToggleDone}>
+              {min + ':' + sec}
+            </span>
+            <button type="button" className="btn btn-light btn-sm" onClick={onPlay} title="Play">
+              <i className="fa fa-play" />
+            </button>
+            <button type="button" className="btn btn-light btn-sm" onClick={onPause} title="Pause">
+              <i className="fa fa-pause" />
+            </button>
+            <span className="todo-list-item-date">{date}</span>
           </div>
-        )}
-      </span>
-    );
-  }
+          <div>
+            <button
+              type="button"
+              className="btn btn-outline-success btn-sm float-right"
+              onClick={onToggleImportant}
+              title="Make Important"
+            >
+              <i className="fa fa-exclamation" />
+            </button>
+            <button type="button" className="btn btn-outline-warning btn-sm float-right" onClick={onEdit} title="Edit">
+              <i className="fa fa-pencil" />
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-danger btn-sm float-right"
+              onClick={onDeleted}
+              title="Delete"
+            >
+              <i className="fa fa-trash-o" />
+            </button>
+          </div>
+        </div>
+      )}
+    </span>
+  );
 }
 
 TodoListItem.defaultProps = {
   label: '',
-  onDeleted: () => {
-  },
-  onToggleImportant: () => {
-  },
-  onToggleDone: () => {
-  },
+  onDeleted: () => {},
+  onToggleImportant: () => {},
+  onToggleDone: () => {},
   important: false,
   done: false,
   date: new Date(),
-  timer: [3, 33],
 };
 TodoListItem.propTypes = {
   label: PropTypes.string,
