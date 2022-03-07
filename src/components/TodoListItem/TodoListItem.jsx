@@ -24,7 +24,7 @@ export default class TodoListItem extends Component {
       min,
       sec,
       onPause,
-      onPlay
+      onPlay,
     } =
       this.props;
 
