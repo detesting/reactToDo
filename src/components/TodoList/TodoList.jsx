@@ -7,13 +7,13 @@ import './TodoList.css';
 
 export default class TodoList extends Component {
   render() {
-    const { todos, onDeleted, onToggleImportant, onToggleDone, onEdit, editingItem } = this.props;
+    const { todos, onDeleted, onToggleImportant, onToggleDone, onEdit, editingItem, onPause, onPlay } = this.props;
 
     const elements = todos.map((item) => {
       const { id, visible, label, important, done, date, edit, ...itemProps } = item;
       if (visible) {
         return (
-          <li key={id} className="list-group-item">
+          <li key={id} className='list-group-item'>
             <TodoListItem
               label={label}
               important={important}
@@ -26,6 +26,8 @@ export default class TodoList extends Component {
               onToggleDone={() => onToggleDone(id)}
               onEdit={() => onEdit(id)}
               editingItem={(e, value) => editingItem(id, value, e)}
+              onPause={() => onPause(id)}
+              onPlay={() => onPlay(id)}
             />
           </li>
         );
@@ -34,15 +36,18 @@ export default class TodoList extends Component {
       }
     });
 
-    return <ul className="list-group todo-list">{elements}</ul>;
+    return <ul className='list-group todo-list'>{elements}</ul>;
   }
 }
 
 TodoList.defaultProps = {
   todos: [],
-  onDeleted: () => {},
-  onToggleImportant: () => {},
-  onToggleDone: () => {},
+  onDeleted: () => {
+  },
+  onToggleImportant: () => {
+  },
+  onToggleDone: () => {
+  },
 };
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),

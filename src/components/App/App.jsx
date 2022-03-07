@@ -14,14 +14,14 @@ export default class App extends Component {
 
   state = {
     todoData: [
-      this.createTodoItem('Drink Coffee', '2021-12-02T22:00:00'),
-      this.createTodoItem('Make Awesome App', '2020-12-02T12:00:00'),
-      this.createTodoItem('Have a lunch', '2021-06-02T00:00:00'),
+      this.createTodoItem('Drink Coffee', '2021-12-02T22:00:00', 4, 7),
+      this.createTodoItem('Make Awesome App', '2020-12-02T12:00:00', 0, 35),
+      this.createTodoItem('Have a lunch', '2021-06-02T00:00:00', 1, 48),
     ],
     filter: 'all',
   };
 
-  createTodoItem(label, date) {
+  createTodoItem(label, date, min, sec) {
     return {
       label,
       important: false,
@@ -30,6 +30,9 @@ export default class App extends Component {
       visible: true,
       date: formatDistanceToNow(Date.parse(date), { addSuffix: true }),
       edit: false,
+      min: min,
+      sec: sec,
+      play: null,
     };
   }
 
@@ -46,8 +49,14 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text) => {
-    const newItem = this.createTodoItem(text, new Date());
+  addItem = (text, min, sec) => {
+    if (!min) {
+      min = 0;
+    }
+    if (!sec) {
+      sec = 0;
+    }
+    const newItem = this.createTodoItem(text, new Date(), min, sec);
 
     let todos = this.state.todoData;
     const newArr = [...todos, newItem];
@@ -138,17 +147,17 @@ export default class App extends Component {
 
     filter === 'done'
       ? todoData.forEach((item, i) => {
-          if (!item.done) {
-            this.notVisible(i);
-          }
-        })
+        if (!item.done) {
+          this.notVisible(i);
+        }
+      })
       : filter === 'active'
-      ? todoData.forEach((item, i) => {
+        ? todoData.forEach((item, i) => {
           if (item.done) {
             this.notVisible(i);
           }
         })
-      : todoData.forEach((item, i) => this.setVisible(i));
+        : todoData.forEach((item, i) => this.setVisible(i));
   };
 
   onClearCompleted = () => {
@@ -160,15 +169,64 @@ export default class App extends Component {
     });
   };
 
+  tactAdd = (arr, id) => {
+    const idx = arr.findIndex((el) => el.id === id);
+    const oldItem = arr[idx];
+    const newItem = {
+      ...oldItem,
+      min: oldItem.sec > 0 ? oldItem.min : oldItem.min === 0 ? 0 : oldItem.min - 1,
+      sec: oldItem.sec > 0 ? oldItem.sec - 1 : oldItem.min === 0 ? 0 : 59,
+    };
+
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
+  };
+
+  onPlay = (id) => {
+    let arr = this.state.todoData;
+    const idx = arr.findIndex((el) => el.id === id);
+    const oldItem = arr[idx];
+    const newItem = {
+      ...oldItem,
+      play: setInterval(() => {
+        this.setState(({ todoData }) => {
+          return {
+            todoData: this.tactAdd(todoData, id),
+          };
+        });
+      }, 1000),
+    };
+    this.setState(() => {
+      return {
+        todoData: [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)],
+      };
+    });
+  };
+
+  onPause = (id) => {
+    let arr = this.state.todoData;
+    const idx = arr.findIndex((el) => el.id === id);
+    const oldItem = arr[idx];
+    clearInterval(oldItem.play);
+    const newItem = {
+      ...oldItem,
+      play: null,
+    };
+    this.setState(() => {
+      return {
+        todoData: [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)],
+      };
+    });
+  };
+
   render() {
     const { todoData } = this.state;
     const doneCount = todoData.filter((el) => el.done).length;
     const todoCount = todoData.length - doneCount;
 
     return (
-      <div className="todo-app">
+      <div className='todo-app'>
         <AppHeader done={doneCount} />
-        <div className="top-panel d-flex">
+        <div className='top-panel d-flex'>
           <ItemStatusFilter filter={this.state.filter} onFilterChange={this.onFilterChange} />
         </div>
 
@@ -179,6 +237,8 @@ export default class App extends Component {
           onToggleDone={this.onToggleDone}
           onEdit={this.onEdit}
           editingItem={this.editingItem}
+          onPlay={this.onPlay}
+          onPause={this.onPause}
         />
 
         <ItemAddForm onItemAdded={this.addItem} />
