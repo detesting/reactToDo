@@ -12,8 +12,6 @@ export default function TodoList({
   onToggleDone,
   onEdit,
   editingItem,
-  onPause,
-  onPlay,
 }) {
   const elements = todos.map((item) => {
     const { id, visible, label, important, done, date, edit, ...itemProps } = item;
@@ -32,8 +30,6 @@ export default function TodoList({
             onToggleDone={() => onToggleDone(id)}
             onEdit={() => onEdit(id)}
             editingItem={(e, value) => editingItem(id, value, e)}
-            onPause={() => onPause(id)}
-            onPlay={() => onPlay(id)}
           />
         </li>
       );

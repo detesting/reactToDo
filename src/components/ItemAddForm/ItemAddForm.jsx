@@ -12,11 +12,32 @@ export default function ItemAddForm({ onItemAdded }) {
   };
 
   const onMinChange = (e) => {
-    setMin(e.target.value);
+    if (!e.target.value.length) {
+      setMin(e.target.value);
+    }
+    if (e.target.value.length <= 4) {
+      if (e.target.value.length) {
+        if (Number(e.target.value[e.target.value.length - 1]) || e.target.value[e.target.value.length - 1] === '0') {
+          setMin(e.target.value);
+        }
+      }
+    }
   };
 
   const onSecChange = (e) => {
-    setSec(e.target.value);
+    if (!e.target.value.length) {
+      setSec(e.target.value);
+    }
+    if (e.target.value.length <= 4) {
+      if (e.target.value.length) {
+        if (Number(e.target.value[e.target.value.length - 1]) || e.target.value[e.target.value.length - 1] === '0') {
+          if (Number(e.target.value) <= 59) {
+            setSec(e.target.value);
+          }
+        }
+      }
+    }
+
   };
 
   const onSubmit = (e) => {
@@ -29,37 +50,37 @@ export default function ItemAddForm({ onItemAdded }) {
     setSec('');
   };
   return (
-    <form className="item-add-form d-flex" onSubmit={onSubmit}>
-      <div className="input-group">
-        <label htmlFor="inputAdd" />
+    <form className='item-add-form d-flex' onSubmit={onSubmit}>
+      <div className='input-group'>
+        <label htmlFor='inputAdd' />
         <input
-          type="text"
-          className="form-control col col-lg-10"
+          type='text'
+          className='form-control col col-lg-10'
           onChange={onLabelChange}
-          placeholder="What needs to be done"
+          placeholder='What needs to be done'
           value={label}
-          id="inputAdd"
+          id='inputAdd'
         />
-        <label htmlFor="inputMin" />
+        <label htmlFor='inputMin' />
         <input
-          type="text"
-          className="form-control col col-lg-2"
+          type='text'
+          className='form-control col col-lg-2'
           onChange={onMinChange}
-          placeholder="Min"
+          placeholder='Min'
           value={min}
-          id="inputMin"
+          id='inputMin'
         />
-        <label htmlFor="inputSec" />
+        <label htmlFor='inputSec' />
         <input
-          type="text"
-          className="form-control col col-lg-2"
+          type='text'
+          className='form-control col col-lg-2'
           onChange={onSecChange}
-          placeholder="Sec"
+          placeholder='Sec'
           value={sec}
-          id="inputSec"
+          id='inputSec'
         />
-        <div className="input-group-append">
-          <button className="btn btn-outline-secondary">Add Item</button>
+        <div className='input-group-append'>
+          <button className='btn btn-outline-secondary'>Add Item</button>
         </div>
       </div>
     </form>

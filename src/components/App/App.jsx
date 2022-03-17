@@ -11,7 +11,46 @@ import './App.css';
 
 export default function App() {
   let maxId = 100;
+
+  const [todoData, setTodoData] = useState([{
+    label: 'Drink Coffee',
+    important: false,
+    done: false,
+    id: 100,
+    visible: true,
+    date: formatDistanceToNow(Date.parse('2021-12-02T22:00:00'), { addSuffix: true }),
+    edit: false,
+    min: 4,
+    sec: 7,
+    play: null,
+  }, {
+    label: 'Make Awesome App',
+    important: false,
+    done: false,
+    id: 101,
+    visible: true,
+    date: formatDistanceToNow(Date.parse('2020-12-02T12:00:00'), { addSuffix: true }),
+    edit: false,
+    min: 2,
+    sec: 10,
+    play: null,
+  }, {
+    label: 'Have a lunch',
+    important: false,
+    done: false,
+    id: 102,
+    visible: true,
+    date: formatDistanceToNow(Date.parse('2021-06-02T00:00:00'), { addSuffix: true }),
+    edit: false,
+    min: 0,
+    sec: 36,
+    play: null,
+  }]);
+
   const createTodoItem = (label, date, min, sec) => {
+    if (todoData.length) {
+      maxId = todoData[todoData.length - 1].id + 1;
+    }
     return {
       label,
       important: false,
@@ -25,12 +64,6 @@ export default function App() {
       play: null,
     };
   };
-
-  const [todoData, setTodoData] = useState([
-    createTodoItem('Drink Coffee', '2021-12-02T22:00:00', 4, 7),
-    createTodoItem('Make Awesome App', '2020-12-02T12:00:00', 0, 35),
-    createTodoItem('Have a lunch', '2021-06-02T00:00:00', 1, 48),
-  ]);
   const [filter, setFilter] = useState('all');
 
   const deleteItem = (id) => {
@@ -50,7 +83,8 @@ export default function App() {
       sec = 0;
     }
     const newItem = createTodoItem(text, new Date(), min, sec);
-    setTodoData([...todoData, newItem]);
+    const newArr = [...todoData, newItem];
+    setTodoData(newArr);
   };
 
   const toggleProperty = (arr, id, propName) => {
@@ -132,38 +166,13 @@ export default function App() {
     setTodoData([...arr]);
   };
 
-  const onPlay = (id) => {
-    const arr = todoData.map((item, i) => {
-      if (item.id === id) {
-        item.play = setInterval(() => {
-          item.min = item.sec > 0 ? item.min : item.min === 0 ? 0 : item.min - 1;
-          item.sec = item.sec > 0 ? item.sec - 1 : item.min === 0 ? 0 : 59;
-          setTodoData([...todoData.slice(0, i), item, ...todoData.slice(i + 1)]);
-        }, 1000);
-      }
-      return item;
-    });
-    setTodoData(arr);
-  };
-
-  const onPause = (id) => {
-    const idx = todoData.findIndex((el) => el.id === id);
-    const oldItem = todoData[idx];
-    clearInterval(oldItem.play);
-    const newItem = {
-      ...oldItem,
-      play: null,
-    };
-    setTodoData([...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]);
-  };
-
   const doneCount = todoData.filter((el) => el.done).length;
   const todoCount = todoData.length - doneCount;
 
   return (
-    <div className="todo-app">
+    <div className='todo-app'>
       <AppHeader done={doneCount} />
-      <div className="top-panel d-flex">
+      <div className='top-panel d-flex'>
         <ItemStatusFilter filter={filter} onFilterChange={onFilterChange} />
       </div>
 
@@ -174,8 +183,6 @@ export default function App() {
         onToggleDone={onToggleDone}
         onEdit={onEdit}
         editingItem={editingItem}
-        onPlay={onPlay}
-        onPause={onPause}
       />
 
       <ItemAddForm onItemAdded={addItem} />
