@@ -184,7 +184,6 @@ export default function App() {
         onEdit={onEdit}
         editingItem={editingItem}
       />
-
       <ItemAddForm onItemAdded={addItem} />
       <Footer toDo={todoCount} onClearCompleted={onClearCompleted} />
     </div>

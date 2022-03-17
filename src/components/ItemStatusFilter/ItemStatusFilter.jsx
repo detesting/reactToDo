@@ -13,18 +13,19 @@ export default function ItemStatusFilter({ onFilterChange, filter }) {
     const classNames = 'btn ' + (isActive ? 'btn-info' : 'btn-outline-secondary');
 
     return (
-      <button key={name} type="button" onClick={() => onFilterChange(name)} className={classNames}>
+      <button key={name} type='button' onClick={() => onFilterChange(name)} className={classNames}>
         {label}
       </button>
     );
   });
 
-  return <div className="btn-group">{buttons}</div>;
+  return <div className='btn-group'>{buttons}</div>;
 }
 
 ItemStatusFilter.defaultProps = {
   filter: '',
-  onFilterChange: () => {},
+  onFilterChange: () => {
+  },
 };
 ItemStatusFilter.propTypes = {
   filter: PropTypes.string,

@@ -34,7 +34,6 @@ export default function TodoListItem({
     classNames += ' important';
   }
 
-
   const onPlay = () => {
     if (status === 'play'){
       setMin(secItem > 0 ? minItem : minItem === 0 ? 0 : minItem - 1);

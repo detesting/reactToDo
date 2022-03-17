@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TodoListItem from '../TodoListItem';
-
 import './TodoList.css';
 
 export default function TodoList({
@@ -17,7 +16,7 @@ export default function TodoList({
     const { id, visible, label, important, done, date, edit, ...itemProps } = item;
     if (visible) {
       return (
-        <li key={id} className="list-group-item">
+        <li key={id} className='list-group-item'>
           <TodoListItem
             label={label}
             important={important}
@@ -38,14 +37,17 @@ export default function TodoList({
     }
   });
 
-  return <ul className="list-group todo-list">{elements}</ul>;
+  return <ul className='list-group todo-list'>{elements}</ul>;
 }
 
 TodoList.defaultProps = {
   todos: [],
-  onDeleted: () => {},
-  onToggleImportant: () => {},
-  onToggleDone: () => {},
+  onDeleted: () => {
+  },
+  onToggleImportant: () => {
+  },
+  onToggleDone: () => {
+  },
 };
 TodoList.propTypes = {
   todos: PropTypes.arrayOf(PropTypes.object),
